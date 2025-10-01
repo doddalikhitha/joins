@@ -1,0 +1,26 @@
+USE LibraryDB;
+
+-- 1. INNER JOIN: Loans with book and member details
+SELECT l.loan_id, b.title, m.name, l.loan_date, l.status
+FROM Loans l
+INNER JOIN Books b ON l.book_id = b.book_id
+INNER JOIN Members m ON l.member_id = m.member_id;
+
+-- 2. LEFT JOIN: Show all members and their loans (if any)
+SELECT m.member_id, m.name, l.loan_id, l.status
+FROM Members m
+LEFT JOIN Loans l ON m.member_id = l.member_id;
+
+-- 3. RIGHT JOIN: Show all books and loans (if any)
+SELECT b.book_id, b.title, l.loan_id, l.status
+FROM Books b
+RIGHT JOIN Loans l ON b.book_id = l.book_id;
+
+-- 4. FULL OUTER JOIN (MySQL workaround using UNION)
+SELECT m.name, l.loan_id, l.status
+FROM Members m
+LEFT JOIN Loans l ON m.member_id = l.member_id
+UNION
+SELECT m.name, l.loan_id, l.status
+FROM Members m
+RIGHT JOIN Loans l ON m.member_id = l.member_id;
